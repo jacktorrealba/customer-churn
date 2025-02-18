@@ -12,7 +12,6 @@ def main():
     # clean data
     cleaned_data = cleaner.clean(df)
     
-    
     # perform feature engineering on the cleaned data
     processed_data = feature_engineer.create_features(cleaned_data)
     
@@ -24,9 +23,8 @@ def main():
     model_trainer.train(X, y)
     
     # save the model as a pickle file
-    model_trainer.save_model('/backend/models/churn_model.pkl')
+    model_trainer.save_model('backend/src/model/churn_model.pkl')
     
 if __name__ == "__main__":
     main()
-    
     

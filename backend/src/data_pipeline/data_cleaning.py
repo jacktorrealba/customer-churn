@@ -9,10 +9,25 @@ class DataCleaner:
         # copy data
         df = data.copy()
         
-        df['TotalCharges'] = pd.to_numeric(arg=df["TotalCharges"], errors='coerce')
-        df['MontlyCharges'] = pd.to_numeric(arg=df["TotalCharges"], errors='coerce')
-        df['TotalCharges'] = df['TotalCharges'].fillna(df['TotalCharges'].mean())
+        # map boolean to 1 and 0
+        df["Churn"] = df["Churn"].map({"Yes": 1, "No": 0})
+        df["PaperlessBilling"] = df["PaperlessBilling"].map({"Yes": 1, "No": 0})
+        df["StreamingMovies"] = df["StreamingMovies"].map({"No internet service": 0, "Yes": 1, "No": 0})
+        df["StreamingTV"] = df["StreamingTV"].map({"No internet service": 0, "Yes": 1, "No": 0})
+        df["TechSupport"] = df["TechSupport"].map({"No internet service": 0, "Yes": 1, "No": 0})
+        df["DeviceProtection"] = df["DeviceProtection"].map({"No internet service": 0, "Yes": 1, "No": 0})
+        df["OnlineBackup"] = df["OnlineBackup"].map({"No internet service": 0, "Yes": 1, "No": 0})
+        df["OnlineSecurity"] = df["OnlineSecurity"].map({"No internet service": 0,"Yes": 1, "No": 0})
+        df["PhoneService"] = df["PhoneService"].map({"Yes": 1, "No": 0})
+        df["Dependents"] = df["Dependents"].map({"Yes": 1, "No": 0})
+        df["Partner"] = df["Partner"].map({"Yes": 1, "No": 0})
+        df["MultipleLines"] = df["MultipleLines"].map({"No phone service": 0, "Yes": 1, "No": 0})
         
+        # convert monetary columns to numbers
+        df['TotalCharges'] = pd.to_numeric(arg=df["TotalCharges"], errors='coerce')
+        df['MonthlyCharges'] = pd.to_numeric(arg=df["TotalCharges"], errors='coerce')
+        
+        # create function to check for outliers through statistical methods like checking IQR 
         def handle_outliers(df, columns):
             for column in columns:
                 if df[column].dtype in ['int64', 'float64']:
@@ -40,6 +55,11 @@ class DataCleaner:
         
         numeric_cols = df[['MonthlyCharges', 'TotalCharges', 'tenure']]
         df  = handle_outliers(df,numeric_cols)
+        
+        # fill columns that were converted earlier with the mean of the column
+        df['TotalCharges'] = df['TotalCharges'].fillna(df['TotalCharges'].mean())
+        df['MonthlyCharges'] = df['MonthlyCharges'].fillna(df['MonthlyCharges'].mean())
+        
         return df
     
     
