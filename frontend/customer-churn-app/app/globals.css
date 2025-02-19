@@ -1,14 +1,4 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 html,
 body {
@@ -17,11 +7,54 @@ body {
 }
 
 body {
-  color: var(--foreground);
+  color: #f8f7ee;
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.main {
+  margin: 2rem;
+}
+
+.form-card {
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+}
+
+.form-item {
+  padding-bottom: 1rem;
+}
+
+.form {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.form-input {
+  margin-right: 0.5rem;
+}
+
+.form-input-num {
+  margin-left: 0.5rem;
+  width: 25%;
+}
+
+.form-input-dropdown {
+  margin-left: 0.5rem;
+  width: 45%;
+}
+
+.boolean-options {
+  width: 30%;
+}
+.numeric-options {
+  width: 30%;
+ }
+.dropdown-options {
+  width: 30%;
 }
 
 * {

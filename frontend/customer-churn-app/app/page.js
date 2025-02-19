@@ -1,95 +1,171 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
+import React, { useState } from "react";
+
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  
+  const [isChecked, setIsChecked] = useState({
+    features : []
+  });
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  const handleCheckboxChange = (e) => {
+    const {value, checked} = e.target;
+    const {features} = isChecked;
+    console.log(e.target.value)
+    console.log(`${value} is ${checked}`)
+
+    if (checked) {
+      setIsChecked({
+        features: [...features, value]
+      });
+    };
+
+
+  }
+
+  const [formData, setFormData] = useState({
+    PhoneService: '',
+    Tenure: '',
+    MultipleLines: '',
+    OnlineSecurity: '',
+    OnlineBackup: '',
+    DeviceProtection: '',
+    TechSupport: '',
+    StreamingTV: '',
+    StreamingMovies: '',
+    PaperlessBilling: '',
+    MonthlyCharges: '',
+    TotalCharges: '',
+    InternetService: '',
+    Contract: '',
+    PaymentMethod: ''
+  });
+
+  const handleChange = (event) => {
+    const {name, value } = event.target
+  }
+  return (
+    <div className="main">
+      <div className="form-card">
+        <form className="form">
+
+          <div className="boolean-options">
+            <div className="form-item">
+              <label htmlFor="PhoneService" name="PhoneService" value={formData.PhoneService} onChange={handleChange}>
+                <input className="form-input" type="checkbox" name="features" value="PhoneService" onChange={handleCheckboxChange}></input>
+                Phone Service: 
+              </label>
+            </div>
+            <div className="form-item">
+              <label htmlFor="MultipleLines" name="MultipleLines" value={formData.MultipleLines} onChange={handleChange}>
+                <input className="form-input" type="checkbox" name="features" value="MultipleLines" onChange={handleCheckboxChange}></input>
+                Multiple Lines:
+              </label>
+            </div>
+            <div className="form-item">
+              <label htmlFor="OnlineSecurity" name="OnlineSecurity" value={formData.OnlineSecurity} onChange={handleChange}>
+                <input className="form-input" type="checkbox" name="features" value="OnlineSecurity" onChange={handleCheckboxChange}></input>
+                Online Security: 
+              </label>
+            </div>
+            <div className="form-item">
+              <label htmlFor="OnlineBackup" name="OnlineBackup" value={formData.OnlineBackup} onChange={handleChange}>
+                <input className="form-input" type="checkbox" name="features" value="OnlineBackup" onChange={handleCheckboxChange}></input>
+                Online Backup: 
+              </label>
+            </div>
+            <div className="form-item">
+              <label htmlFor="DeviceProtection" name="DeviceProtection" value={formData.DeviceProtection} onChange={handleChange}>
+                <input className="form-input" type="checkbox" name="features" value="DeviceProtection" onChange={handleCheckboxChange}></input>
+                Device Protection: 
+              </label>
+            </div>
+            <div className="form-item">
+              <label htmlFor="TechSupport" name="TechSupport" value={formData.TechSupport} onChange={handleChange}>
+                <input className="form-input" type="checkbox" name="features" value="TechSupport" onChange={handleCheckboxChange}></input>
+                Tech Support: 
+              </label>
+            </div>
+            <div className="form-item">
+              <label htmlFor="StreamingTV" name="StreamingTV" value={formData.StreamingTV} onChange={handleChange}>
+                <input className="form-input" type="checkbox" name="features" value="StreamingTV" onChange={handleCheckboxChange}></input>
+                Streaming TV: 
+              </label>
+            </div>
+            <div className="form-item">
+              <label htmlFor="StreamingMovies" name="StreamingMovies" value={formData.StreamingMovies} onChange={handleChange}>
+                <input className="form-input" type="checkbox" name="features" value="StreamingMovies" onChange={handleCheckboxChange}></input>
+                Streaming Movies: 
+              </label>
+            </div>
+            <div className="form-item">
+              <label htmlFor="PaperlessBilling" name="PaperlessBilling" value={formData.PaperlessBilling} onChange={handleChange}>
+                <input className="form-input" type="checkbox" name="features" value="PaperlessBilling" onChange={handleCheckboxChange}></input>
+                PaperlessBilling: 
+              </label>
+            </div>
+          </div>
+
+          <div className="numeric-options">
+            <div className="form-item">
+              <label htmlFor="Tenure" name="Tenure" value={formData.Tenure} onChange={handleChange}>
+                Customer Tenure: 
+                <input className="form-input-num" type="number" name="Tenure"></input>
+              </label>
+            </div>
+            <div className="form-item">
+              <label htmlFor="MonthlyCharges" name="MonthlyCharges" value={formData.MonthlyCharges} onChange={handleChange}>
+                Monthly Charges: 
+                <input className="form-input-num" type="number" name="MonthlyCharges"></input>
+              </label>
+            </div>
+            <div className="form-item">
+              <label htmlFor="TotalCharges" name="TotalCharges" value={formData.TotalCharges} onChange={handleChange}>
+                Total Charges: 
+                <input className="form-input-num" type="number" name="TotalCharges"></input>
+              </label>
+            </div>
+          </div>
+
+          <div className="dropdown-options">
+            <div className="form-item">
+              <label htmlFor="InternetService" name="InternetService" value={formData.InternetService} onChange={handleChange}>
+                Internet Type: 
+                <select className="form-input-dropdown">
+                  <option selected disabled></option>
+                  <option value="dsl">DSL</option>
+                  <option value="Fiberoptic">Fiber Optic</option>
+                  <option value="no">None</option>
+                </select>
+              </label>
+            </div>
+            <div className="form-item">
+              <label htmlFor="Contract" name="Contract" value={formData.Contract} onChange={handleChange}>
+                Contract Type: 
+                <select className="form-input-dropdown">
+                  <option selected disabled></option>
+                  <option value="month-to-month">Month-to-Month</option>
+                  <option value="one year">1 year</option>
+                  <option value="two year">2 Year</option>
+                </select>
+              </label>
+            </div>
+            <div className="form-item">
+              <label htmlFor="PaymentMethod" name="PaymentMethod" value={formData.PaymentMethod} onChange={handleChange}>
+                Payment Method: 
+                <select className="form-input-dropdown">
+                  <option selected disabled></option>
+                  <option value="bank transfer">Bank Transfer</option>
+                  <option value="credit card">Credit Card</option>
+                  <option value="electronic check">E-Check</option>
+                  <option value="mailed check">Mailed Check</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+        </form>
+      </div>
     </div>
   );
 }
