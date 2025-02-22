@@ -22,15 +22,60 @@ body {
   margin-left: auto;
   margin-right: auto;
   width: 75%;
+  border: 2px solid gray;
+  border-radius: 8px;
+  padding: 2rem;
+}
+
+.form-card-title {
+  margin-left: 1.5rem;
+}
+
+.form-card-body {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.form-card-footer {
+  width: 75%;
+  margin: 0 auto 0;
+}
+
+.predict-div {
+  display: flex;
+  justify-content: center;
+}
+
+#predict-btn {
+  width: 25%;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
+.divider {
+  margin: 1.5rem;
 }
 
 .form-item {
   padding-bottom: 1rem;
 }
 
-.form {
+.form-item-select {
+  margin: .5rem 0 0 0;
   display: flex;
-  justify-content: space-evenly;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+.form-item-num {
+  margin: .5rem 0 0 0;
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+.form {
+  
 }
 
 .form-input {
@@ -38,12 +83,11 @@ body {
 }
 
 .form-input-num {
-  margin-left: 0.5rem;
-  width: 25%;
+  width: 45%;
 }
 
+
 .form-input-dropdown {
-  margin-left: 0.5rem;
   width: 45%;
 }
 
