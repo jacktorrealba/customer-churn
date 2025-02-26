@@ -37,9 +37,26 @@ export default function Home() {
   }
 
   // function for handling form submission
-  const handleSubmit = (e) => {
+  const handleSubmit =  async(e) => {
     e.preventDefault()
-    console.log(formData)
+
+    //console.log(formData)
+
+    try {
+      const response = await fetch('http://localhost:5000/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)   
+      });
+
+      const result = await response.json();
+      console.log(result)
+
+    } catch (error) {
+      
+    }
   }
 
 
@@ -61,55 +78,55 @@ export default function Home() {
               <div className="form-item">
                 <label htmlFor="PhoneService">
                   <input className="form-input" type="checkbox" name="PhoneService" value={formData.PhoneService} onChange={handleChange}></input>
-                  Phone Service: 
+                  Phone Service 
                 </label>
               </div>
               <div className="form-item">
                 <label htmlFor="MultipleLines">
                   <input className="form-input" type="checkbox" name="MultipleLines" value={formData.MultipleLines} onChange={handleChange}></input>
-                  Multiple Lines:
+                  Multiple Lines 
                 </label>
               </div>
               <div className="form-item">
                 <label htmlFor="OnlineSecurity">
                   <input className="form-input" type="checkbox" name="OnlineSecurity" value={formData.OnlineSecurity} onChange={handleChange}></input>
-                  Online Security: 
+                  Online Security 
                 </label>
               </div>
               <div className="form-item">
                 <label htmlFor="OnlineBackup">
                   <input className="form-input" type="checkbox" name="OnlineBackup" value={formData.OnlineBackup} onChange={handleChange}></input>
-                  Online Backup: 
+                  Online Backup 
                 </label>
               </div>
               <div className="form-item">
                 <label htmlFor="DeviceProtection">
                   <input className="form-input" type="checkbox" name="DeviceProtection" value={formData.DeviceProtection} onChange={handleChange}></input>
-                  Device Protection: 
+                  Device Protection 
                 </label>
               </div>
               <div className="form-item">
                 <label htmlFor="TechSupport">
                   <input className="form-input" type="checkbox" name="TechSupport" value={formData.TechSupport} onChange={handleChange}></input>
-                  Tech Support: 
+                  Tech Support 
                 </label>
               </div>
               <div className="form-item">
                 <label htmlFor="StreamingTV">
                   <input className="form-input" type="checkbox" name="StreamingTV" value={formData.StreamingTV} onChange={handleChange}></input>
-                  Streaming TV: 
+                  Streaming TV 
                 </label>
               </div>
               <div className="form-item">
                 <label htmlFor="StreamingMovies">
                   <input className="form-input" type="checkbox" name="StreamingMovies" value={formData.StreamingMovies} onChange={handleChange}></input>
-                  Streaming Movies: 
+                  Streaming Movies 
                 </label>
               </div>
               <div className="form-item">
                 <label htmlFor="PaperlessBilling">
                   <input className="form-input" type="checkbox" name="PaperlessBilling" value={formData.PaperlessBilling} onChange={handleChange}></input>
-                  PaperlessBilling: 
+                  PaperlessBilling 
                 </label>
               </div>
             </div>
@@ -117,7 +134,7 @@ export default function Home() {
             <div className="numeric-options">
               <div className="form-item-num">
                 <label htmlFor="Tenure">
-                  Customer Tenure: 
+                  Customer Tenure:
                 </label>
                 <input className="form-input-num" type="number" name="Tenure"  value={formData.Tenure} onChange={handleChange}></input>
               </div>
@@ -138,36 +155,39 @@ export default function Home() {
             <div className="dropdown-options">
               <div className="form-item-select">
                 <label htmlFor="InternetService">
+                  <span style={{ color: 'red' }}>* </span>
                   Internet Type: 
                 </label>
-                <select className="form-input-dropdown" onChange={handleChange} defaultValue={formData.InternetService}>
+                <select className="form-input-dropdown" onChange={handleChange} name="InternetService" value={formData.InternetService} required>
                   <option value="" disabled></option>
-                  <option value="dsl">DSL</option>
+                  <option value="DSL">DSL</option>
                   <option value="Fiberoptic">Fiber Optic</option>
-                  <option value="no">None</option>
+                  <option value="No">None</option>
                 </select>
               </div>
               <div className="form-item-select">
                 <label htmlFor="Contract" >
+                  <span style={{ color: 'red' }}>* </span>
                   Contract Type: 
                 </label>
-                <select className="form-input-dropdown" onChange={handleChange} defaultValue={formData.Contract}>
+                <select className="form-input-dropdown" onChange={handleChange} name="Contract" value={formData.Contract} required>
                   <option value="" disabled></option>
-                  <option value="month-to-month">Month-to-Month</option>
-                  <option value="one year">1 year</option>
-                  <option value="two year">2 Year</option>
+                  <option value="Month-to-month">Month-to-Month</option>
+                  <option value="oneyear">1 year</option>
+                  <option value="twoyear">2 Year</option>
                 </select>
               </div>
               <div className="form-item-select">
                 <label htmlFor="PaymentMethod">
+                  <span style={{ color: 'red' }}>* </span>
                   Payment Method: 
                 </label>
-                <select className="form-input-dropdown" onChange={handleChange} defaultValue={formData.PaymentMethod}>
+                <select className="form-input-dropdown" onChange={handleChange} name="PaymentMethod" value={formData.PaymentMethod} required>
                   <option value="" disabled></option>
-                  <option value="bank transfer">Bank Transfer</option>
-                  <option value="credit card">Credit Card</option>
-                  <option value="electronic check">E-Check</option>
-                  <option value="mailed check">Mailed Check</option>
+                  <option value="banktransfer">Bank Transfer</option>
+                  <option value="creditcard">Credit Card</option>
+                  <option value="electroniccheck">E-Check</option>
+                  <option value="mailedcheck">Mailed Check</option>
                 </select>
               </div>
             </div>
