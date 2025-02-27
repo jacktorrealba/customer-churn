@@ -37,7 +37,6 @@ def feature_engineer(form_data):
 
     # == one hot encoding category features ==
     category_features = ['InternetService', 'Contract', 'PaymentMethod']
-    #category_features = np.array(category_features).reshape(1,-1)
     
     # strip whitespace
     df['InternetService'] = df['InternetService'].str.split().str.join('')
@@ -54,13 +53,8 @@ def feature_engineer(form_data):
     # == count number of services ==
     # define the services
     services = ['PhoneService', 'MultipleLines', 'OnlineSecurity','OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'PaperlessBilling']
-
-    # for each service, check if there is a 1 (boolean) which indicates the customer has a service
-    #df_new['count_of_services'] = sum(form_data[service] == 1 for service in services)
-   #df_new[services].iloc[0]
-    
     df_new['count_of_services'] = (df_new[services].iloc[0] == 1).sum()
-    print(df['count_of_services'])
+
     # == binning customer tenure ==
     # check what bin the customer belongs to
     if 0 < int(df_new['Tenure'].iloc[0]) <= 12: # if they are between 0 and 12 -> new customer
@@ -83,8 +77,7 @@ def feature_engineer(form_data):
     
     # return the feature engineered data
     data = df_new.to_dict('index')
-    #print(df_new)
-    print(data)
+    print('reached the end')
     return data
 
 # create route for the app
@@ -102,10 +95,12 @@ def predict():
         #features = data['features']
         
         features_arr = feature_engineer(data)
-        print(features_arr)
+        #print(features_arr)
+        
         # convert to numpy array
         input_features = np.array(features_arr).reshape(1,-1)
-        #print(input_features)
+        print(model)
+        
         # make prediction
         prediction = model.predict(input_features)[0]
         

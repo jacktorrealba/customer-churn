@@ -7,7 +7,7 @@ export default function Home() {
   // define form elements and their initial state
   const [formData, setFormData] = useState({
     PhoneService: false,
-    Tenure: 0,
+    Tenure: "",
     MultipleLines: false,
     OnlineSecurity: false,
     OnlineBackup: false,
@@ -16,8 +16,8 @@ export default function Home() {
     StreamingTV: false,
     StreamingMovies: false,
     PaperlessBilling: false,
-    MonthlyCharges: 0.00,
-    TotalCharges: 0.00,
+    MonthlyCharges: "",
+    TotalCharges: "",
     InternetService: "",
     Contract: "",
     PaymentMethod: ""
@@ -30,17 +30,21 @@ export default function Home() {
     // update the form's changed elements
     setFormData((formData) => ({
       ...formData,
-      // if the type is a checkbox then store the checked state, otherwise store the value
-      [name]: type === "checkbox" ? checked : value,
-    }));
+      // store the checked state for all checkbox types
+      [name]: type === "checkbox" ? checked :
+              // parse int for the Tenure field
+              name === "Tenure" ? (value === "" ? "" : parseInt(value, 10)) || 0 :
+              // parse float for the MonthlyCharges and TotalCharges field
+              ["MonthlyCharges", "TotalCharges"].includes(name) ? (value === "" ? "" : parseFloat(value)) || 0.00 : 
+              // return the value if all else fails
+              value
+  }));
 
   }
 
   // function for handling form submission
   const handleSubmit =  async(e) => {
     e.preventDefault()
-
-    //console.log(formData)
 
     try {
       const response = await fetch('http://localhost:5000/predict', {
