@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 import pandas as pd
+import traceback
 from sklearn.preprocessing import OneHotEncoder
 
 app = Flask(__name__)
@@ -22,8 +23,18 @@ if os.path.exists(model_path):
     # open the file in binary read mode
     with open(model_path, 'rb') as file:
         # load the model from the file
-        model = pickle.load(file)
-    print("Success: Model loaded!")
+        loaded_object = pickle.load(file)
+        if isinstance(loaded_object, dict):
+            model = loaded_object.get('model', None)  # Extract only the model
+            if model is None:
+                print("Error: Model not found in dictionary!")
+        else:
+            model = loaded_object
+    if hasattr(model, "predict"):
+        print("Success: Model loaded!")
+    else:
+        print("Model is not the correct type")
+        model = None
 else:
     print("Failed to find the model file")
     model = None
@@ -49,7 +60,7 @@ def feature_engineer(form_data):
     one_hot_df = pd.DataFrame(one_hot_encoded, columns=encoder.get_feature_names_out(category_features))
     df_new = pd.concat([df, one_hot_df], axis=1)
     df_new = df_new.drop(category_features, axis=1)
-    
+    print(df_new.info())
     # == count number of services ==
     # define the services
     services = ['PhoneService', 'MultipleLines', 'OnlineSecurity','OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'PaperlessBilling']
@@ -71,13 +82,33 @@ def feature_engineer(form_data):
         df_new['3_plus_customer'] = 1
     
     # == binning monthly charges into package tiers ==
-    package_tier = [0, 30, 70, 100, 120]
-    package_tier_labels = ['basic', 'mid_tier', 'premium', 'high_end']
-    df_new['PackageTier'] = pd.cut(df_new['MonthlyCharges'], bins=package_tier, labels=package_tier_labels)
+    # package_tier = [0, 30, 70, 100, 120]
+    # package_tier_labels = ['basic', 'mid_tier', 'premium', 'high_end']
+    # df_new['PackageTier'] = pd.cut(df_new['MonthlyCharges'], bins=package_tier, labels=package_tier_labels)
     
+    if 0 < int(df_new['MonthlyCharges'].iloc[0]) <= 30: 
+        df_new['PackageTier_basic'] = 1
+        df_new['PackageTier_mid_tier'] = 0
+        df_new['PackageTier_premium'] = 0
+        df_new['PackageTier_high_end'] = 0
+    elif 31 < int(df_new['MonthlyCharges'].iloc[0]) <= 70: 
+        df_new['PackageTier_basic'] = 0
+        df_new['PackageTier_mid_tier'] = 1
+        df_new['PackageTier_premium'] = 0
+        df_new['PackageTier_high_end'] = 0
+    elif 71 < int(df_new['MonthlyCharges'].iloc[0] <= 100): 
+        df_new['PackageTier_basic'] = 0
+        df_new['PackageTier_mid_tier'] = 0
+        df_new['PackageTier_premium'] = 1
+        df_new['PackageTier_high_end'] = 0
+    else: 
+        df_new['PackageTier_basic'] = 0
+        df_new['PackageTier_mid_tier'] = 0
+        df_new['PackageTier_premium'] = 0
+        df_new['PackageTier_high_end'] = 1
     # return the feature engineered data
-    data = df_new.to_dict('index')
-    print('reached the end')
+    data = df_new.values
+    print(df_new.info())
     return data
 
 # create route for the app
@@ -90,19 +121,14 @@ def predict():
     try:
         # get data from json request
         data = request.get_json()
-        #print(data)
-        
-        #features = data['features']
         
         features_arr = feature_engineer(data)
-        #print(features_arr)
         
         # convert to numpy array
         input_features = np.array(features_arr).reshape(1,-1)
-        print(model)
-        
+        print(input_features)
         # make prediction
-        prediction = model.predict(input_features)[0]
+        prediction = model.predict(input_features)
         
         # store the results
         result = {
@@ -114,6 +140,7 @@ def predict():
         return jsonify(result)
     
     except Exception as e:
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 400
 
 # make dir if it doesn't exist

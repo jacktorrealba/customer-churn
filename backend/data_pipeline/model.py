@@ -32,10 +32,7 @@ class ModelTrainer:
 
     def save_model(self, filepath: str):
         with open(filepath, 'wb') as f:
-            pickle.dump({
-                'model':self.model,
-                'feature_engineer': self.feature_engineer
-            }, f)
+            pickle.dump(self.model, f)
     
     
         

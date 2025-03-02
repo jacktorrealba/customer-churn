@@ -6,16 +6,26 @@ export default function Home() {
 
   // define form elements and their initial state
   const [formData, setFormData] = useState({
-    PhoneService: false,
+    PhoneService: 0,
     Tenure: "",
-    MultipleLines: false,
-    OnlineSecurity: false,
-    OnlineBackup: false,
-    DeviceProtection: false,
-    TechSupport: false,
-    StreamingTV: false,
-    StreamingMovies: false,
-    PaperlessBilling: false,
+    MultipleLines: 0,
+    OnlineSecurity: 0,
+    OnlineBackup: 0,
+    DeviceProtection: 0,
+    TechSupport: 0,
+    StreamingTV: 0,
+    StreamingMovies: 0,
+    PaperlessBilling: 0,
+    InternetService_Fiberoptic: 0,
+    InternetService_dsl: 0,
+    InternetSerivce_no: 0,
+    Contract_oneyear: 0,
+    Contract_twoyear: 0,
+    Contract_Month_to_month: 0,
+    PaymentMethod_creditcard: 0,
+    PaymentMethod_banktranser: 0,
+    PaymentMethod_electroniccheck: 0,
+    PaymentMethod_mailedcheck: 0,
     MonthlyCharges: "",
     TotalCharges: "",
     InternetService: "",
@@ -23,21 +33,30 @@ export default function Home() {
     PaymentMethod: ""
   });
 
-  const handleChange = (e) => {
-    // extract the name, type, value and checked from the target that the event fired from
-    const { name, type, value, checked } = e.target;
-    
+  const handleChange = ({target : {name, type, value, checked}}) => { // deconstructing fields from the target
+    // define variable to hold the new values from the form inputs
+    let newVal;
+
+    // based on the input type...
+    switch (type) {
+      // when it's a checkbox, map the checked state to 1 otherwise 0
+      case "checkbox":
+        newVal = checked ? 1 : 0
+        break;
+      // when it's a number, and the name of the input is Tenure, then parseInt the value, otherwise parseFloat for the two 
+      // other inputs that are floats
+      case "number":
+        newVal = "" ? "" : (name === "Tenure" ? parseInt(value) || "" : parseFloat(value) || "") // if the input is cleared, leave as blank to avoid NaN
+        break;
+        // for any other input types, just store the value 
+        default:
+          newVal = value
+    }
+
     // update the form's changed elements
     setFormData((formData) => ({
       ...formData,
-      // store the checked state for all checkbox types
-      [name]: type === "checkbox" ? checked :
-              // parse int for the Tenure field
-              name === "Tenure" ? (value === "" ? "" : parseInt(value, 10)) || 0 :
-              // parse float for the MonthlyCharges and TotalCharges field
-              ["MonthlyCharges", "TotalCharges"].includes(name) ? (value === "" ? "" : parseFloat(value)) || 0.00 : 
-              // return the value if all else fails
-              value
+      [name]: newVal
   }));
 
   }
@@ -45,7 +64,6 @@ export default function Home() {
   // function for handling form submission
   const handleSubmit =  async(e) => {
     e.preventDefault()
-
     try {
       const response = await fetch('http://localhost:5000/predict', {
         method: 'POST',
@@ -140,7 +158,7 @@ export default function Home() {
                 <label htmlFor="Tenure">
                   Customer Tenure:
                 </label>
-                <input className="form-input-num" type="number" name="Tenure"  value={formData.Tenure} onChange={handleChange}></input>
+                <input className="form-input-num" type="number" name="Tenure" value={formData.Tenure} onChange={handleChange}></input>
               </div>
               <div className="form-item-num">
                 <label htmlFor="MonthlyCharges">
