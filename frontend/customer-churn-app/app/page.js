@@ -1,5 +1,4 @@
 'use client'
-import { formatDynamicAPIAccesses } from "next/dist/server/app-render/dynamic-rendering";
 import React, { useState } from "react";
 
 export default function Home() {
@@ -17,15 +16,9 @@ export default function Home() {
     StreamingMovies: 0,
     PaperlessBilling: 0,
     InternetService_Fiberoptic: 0,
-    InternetService_dsl: 0,
-    InternetSerivce_no: 0,
-    Contract_oneyear: 0,
-    Contract_twoyear: 0,
-    Contract_Month_to_month: 0,
-    PaymentMethod_creditcard: 0,
-    PaymentMethod_banktranser: 0,
-    PaymentMethod_electroniccheck: 0,
-    PaymentMethod_mailedcheck: 0,
+    InternetService: "",
+    Contract: "",
+    PaymentMethod: "",
     MonthlyCharges: "",
     TotalCharges: "",
     InternetService: "",
@@ -33,44 +26,70 @@ export default function Home() {
     PaymentMethod: ""
   });
 
+
   const handleChange = ({target : {name, type, value, checked}}) => { // deconstructing fields from the target
-    // define variable to hold the new values from the form inputs
-    let newVal;
-
-    // based on the input type...
-    switch (type) {
-      // when it's a checkbox, map the checked state to 1 otherwise 0
-      case "checkbox":
-        newVal = checked ? 1 : 0
-        break;
-      // when it's a number, and the name of the input is Tenure, then parseInt the value, otherwise parseFloat for the two 
-      // other inputs that are floats
-      case "number":
-        newVal = "" ? "" : (name === "Tenure" ? parseInt(value) || "" : parseFloat(value) || "") // if the input is cleared, leave as blank to avoid NaN
-        break;
-        // for any other input types, just store the value 
-        default:
-          newVal = value
-    }
-
-    // update the form's changed elements
-    setFormData((formData) => ({
-      ...formData,
-      [name]: newVal
-  }));
-
+      // define variable to hold the new values from the form inputs
+      let newVal;
+      // based on the input type...
+      switch (type) {
+        // when it's a checkbox, map the checked state to 1 otherwise 0
+        case "checkbox":
+          newVal = checked ? 1 : 0
+          break;
+        // when it's a number, and the name of the input is Tenure, then parseInt the value, otherwise parseFloat for the two 
+        // other inputs that are floats
+        case "number":
+          newVal = "" ? "" : (name === "Tenure" ? parseInt(value) || "" : parseFloat(value) || "") // if the input is cleared, leave as blank to avoid NaN
+          break;
+          // for any other input types, just store the value 
+          default:
+            newVal = value
+      }
+  
+      // update the form's changed elements
+      setFormData((formData) => ({
+        ...formData,
+        [name]: newVal
+    }));
+    
   }
 
   // function for handling form submission
   const handleSubmit =  async(e) => {
     e.preventDefault()
+    // map the form data to match the model input
+    const modelInput = {
+      PhoneService: formData.PhoneService ? 1 : 0,
+      tenure: formData.Tenure === '' ? 0 : parseFloat(formData.Tenure),
+      MultipleLines: formData.MultipleLines ? 1 : 0,
+      OnlineSecurity: formData.OnlineSecurity ? 1 : 0,
+      OnlineBackup: formData.OnlineBackup ? 1 : 0,
+      DeviceProtection: formData.DeviceProtection ? 1 : 0,
+      TechSupport: formData.TechSupport ? 1 : 0,
+      StreamingTV: formData.StreamingTV ? 1 : 0,
+      StreamingMovies: formData.StreamingMovies ? 1 : 0,
+      PaperlessBilling: formData.PaperlessBilling ? 1 : 0,
+      InternetService_fiberoptic: formData.InternetService === 'fiberoptic' ? 1 : 0,
+      InternetService_dsl: formData.InternetService === 'dsl' ? 1 : 0,
+      InternetService_no: formData.InternetService === 'no' ? 1 : 0,
+      Contract_oneyear: formData.Contract === 'oneyear' ? 1 : 0,
+      Contract_twoyear: formData.Contract === 'twoyear' ? 1 : 0,
+      Contract_Month_to_month: formData.Contract === 'Month_to_month' ? 1 : 0,
+      PaymentMethod_creditcard: formData.PaymentMethod === 'creditcard' ? 1 : 0,
+      PaymentMethod_banktransfer: formData.PaymentMethod === 'banktransfer' ? 1 : 0,
+      PaymentMethod_electroniccheck: formData.PaymentMethod === 'electroniccheck' ? 1 : 0,
+      PaymentMethod_mailedcheck: formData.PaymentMethod === 'mailedcheck' ? 1 : 0,
+      MonthlyCharges: formData.MonthlyCharges === '' ? 0 : parseFloat(formData.MonthlyCharges),
+      TotalCharges: formData.TotalCharges === '' ? 0 : parseFloat(formData.TotalCharges)
+    };
+
     try {
       const response = await fetch('http://localhost:5000/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)   
+        body: JSON.stringify(modelInput)   
       });
 
       const result = await response.json();
@@ -194,7 +213,7 @@ export default function Home() {
                 </label>
                 <select className="form-input-dropdown" onChange={handleChange} name="Contract" value={formData.Contract} required>
                   <option value="" disabled></option>
-                  <option value="Month-to-month">Month-to-Month</option>
+                  <option value="Month_to_month">Month-to-Month</option>
                   <option value="oneyear">1 year</option>
                   <option value="twoyear">2 Year</option>
                 </select>

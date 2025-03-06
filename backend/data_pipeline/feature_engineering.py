@@ -71,10 +71,9 @@ class FeatureEngineer:
         #print(df_new)
         # creating a new feature the identify how many services a customer has
         # list of the services 
-        services = df_new[['PaperlessBilling', 'StreamingMovies', 'StreamingTV', 'TechSupport', 'DeviceProtection', 'OnlineBackup', 'OnlineSecurity', 'MultipleLines', 'PhoneService', 'InternetService_DSL', 'InternetService_Fiberoptic']]
+        services = df_new[['PaperlessBilling', 'StreamingMovies', 'StreamingTV', 'TechSupport', 'DeviceProtection', 'OnlineBackup', 'OnlineSecurity', 'MultipleLines', 'PhoneService', 'InternetService_dsl', 'InternetService_fiberoptic']]
         
         # store the counts of each of services in a new column
         df_new['count_of_services'] = df_new[services.columns].apply(lambda row: row.value_counts().get(1,0), axis=1)
 
-        print(df_new)
         return df_new
