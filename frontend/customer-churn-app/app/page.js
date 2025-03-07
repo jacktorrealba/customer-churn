@@ -60,7 +60,7 @@ export default function Home() {
     // map the form data to match the model input
     const modelInput = {
       PhoneService: formData.PhoneService ? 1 : 0,
-      tenure: formData.Tenure === '' ? 0 : parseFloat(formData.Tenure),
+      Tenure: formData.Tenure === '' ? 0 : parseFloat(formData.Tenure),
       MultipleLines: formData.MultipleLines ? 1 : 0,
       OnlineSecurity: formData.OnlineSecurity ? 1 : 0,
       OnlineBackup: formData.OnlineBackup ? 1 : 0,
@@ -82,6 +82,8 @@ export default function Home() {
       MonthlyCharges: formData.MonthlyCharges === '' ? 0 : parseFloat(formData.MonthlyCharges),
       TotalCharges: formData.TotalCharges === '' ? 0 : parseFloat(formData.TotalCharges)
     };
+
+    console.log(modelInput)
 
     try {
       const response = await fetch('http://localhost:5000/predict', {

@@ -53,17 +53,17 @@ def feature_engineer(form_data):
 
     # == binning customer tenure ==
     if 0 < int(df['Tenure'].iloc[0]) <= 12: # if they are between 0 and 12 -> new customer
-        df['new_customer'] = 1
-        df['1_to_3yr_customer'] = 0
-        df['3_plus_customer'] = 0
+        df['TenureCategory_new_customer'] = 1
+        df['TenureCategory_1_to_3yr_customer'] = 0
+        df['TenureCategory_3_plus_customer'] = 0
     elif 13 < int(df['Tenure'].iloc[0]) <= 36: # if they are between 13 and 36 -> 1 to 3yr customer
-        df['new_customer'] = 0
-        df['1_to_3yr_customer'] = 1
-        df['3_plus_customer'] = 0
+        df['TenureCategory_new_customer'] = 0
+        df['TTenureCategory_1_to_3yr_customer'] = 1
+        df['TenureCategory_3_plus_customer'] = 0
     else: # anything greater than 36 -> 3 plus yr customer
-        df['new_customer'] = 0
-        df['1_to_3yr_customer'] = 0
-        df['3_plus_customer'] = 1
+        df['TenureCategory_new_customer'] = 0
+        df['TenureCategory_1_to_3yr_customer'] = 0
+        df['TenureCategory_3_plus_customer'] = 1
     
     # == binning monthly charges into package tiers ==
     if 0 < int(df['MonthlyCharges'].iloc[0]) <= 30: 
@@ -88,7 +88,7 @@ def feature_engineer(form_data):
         df['PackageTier_high_end'] = 1
     # return the feature engineered data
     data = df.values
-
+    print(df.info())
     return data
 
 # create route for the app
@@ -103,10 +103,10 @@ def predict():
         data = request.get_json()
         
         features_arr = feature_engineer(data)
-        
+        #print("my features",features_arr)
         # convert to numpy array
         input_features = np.array(features_arr).reshape(1,-1)
-    
+        #print(input_features)
         # make prediction
         prediction = model.predict(input_features)
         
