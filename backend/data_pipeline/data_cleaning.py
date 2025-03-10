@@ -25,7 +25,7 @@ class DataCleaner:
         
         # convert monetary columns to numbers
         df['TotalCharges'] = pd.to_numeric(arg=df["TotalCharges"], errors='coerce')
-        df['MonthlyCharges'] = pd.to_numeric(arg=df["TotalCharges"], errors='coerce')
+        df['MonthlyCharges'] = pd.to_numeric(arg=df["MonthlyCharges"], errors='coerce')
         
         # create function to check for outliers through statistical methods like checking IQR 
         def handle_outliers(df, columns):

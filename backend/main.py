@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.preprocessing import StandardScaler
 from data_pipeline import DataCleaner, FeatureEngineer,  ModelTrainer
 
 def main():
@@ -24,6 +25,7 @@ def main():
     
     # save the model as a pickle file
     model_trainer.save_model('backend/model/churn_model.pkl')
+    model_trainer.save_scaler('backend/model/scaler.pkl')
     
 if __name__ == "__main__":
     main()

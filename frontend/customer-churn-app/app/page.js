@@ -1,7 +1,11 @@
 'use client'
 import React, { useState } from "react";
+import ResultsModal from '@/app/components/modal';
 
 export default function Home() {
+
+  const [show, setShow] = useState(false)
+  const handleShow = () => setShow(true);
 
   // define form elements and their initial state
   const [formData, setFormData] = useState({
@@ -74,16 +78,14 @@ export default function Home() {
       InternetService_no: formData.InternetService === 'no' ? 1 : 0,
       Contract_oneyear: formData.Contract === 'oneyear' ? 1 : 0,
       Contract_twoyear: formData.Contract === 'twoyear' ? 1 : 0,
-      Contract_Month_to_month: formData.Contract === 'Month_to_month' ? 1 : 0,
-      PaymentMethod_creditcard: formData.PaymentMethod === 'creditcard' ? 1 : 0,
-      PaymentMethod_banktransfer: formData.PaymentMethod === 'banktransfer' ? 1 : 0,
+      Contract_Month_to_month: formData.Contract === 'month-to-month' ? 1 : 0,
+      PaymentMethod_creditcard: formData.PaymentMethod === 'creditcard(automatic)' ? 1 : 0,
+      PaymentMethod_banktransfer: formData.PaymentMethod === 'banktransfer(automatic)' ? 1 : 0,
       PaymentMethod_electroniccheck: formData.PaymentMethod === 'electroniccheck' ? 1 : 0,
       PaymentMethod_mailedcheck: formData.PaymentMethod === 'mailedcheck' ? 1 : 0,
       MonthlyCharges: formData.MonthlyCharges === '' ? 0 : parseFloat(formData.MonthlyCharges),
       TotalCharges: formData.TotalCharges === '' ? 0 : parseFloat(formData.TotalCharges)
     };
-
-    console.log(modelInput)
 
     try {
       const response = await fetch('http://localhost:5000/predict', {
@@ -95,11 +97,14 @@ export default function Home() {
       });
 
       const result = await response.json();
-      console.log(result)
+      console.log(result);
+      handleShow();
 
     } catch (error) {
-      
+      console.log(error);
     }
+
+    
   }
 
 
@@ -245,6 +250,7 @@ export default function Home() {
           </div>
         </div>
       </form>
+      <ResultsModal></ResultsModal>
     </div>
   );
 }

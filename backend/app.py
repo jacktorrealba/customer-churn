@@ -6,6 +6,7 @@ from flask_cors import CORS
 import os
 import pandas as pd
 import traceback
+from sklearn.preprocessing import StandardScaler
 
 
 app = Flask(__name__)
@@ -17,7 +18,19 @@ CORS(app, resources={r"/*": {
 
 # load model 
 model_path = os.path.join(os.path.dirname(__file__), 'model', 'churn_model.pkl') 
+# load scaler
+scaler_path = os.path.join(os.path.dirname(__file__), 'model', 'scaler.pkl')
 
+
+# check if a scaler exists
+if os.path.exists(scaler_path):
+    with open(scaler_path, 'rb') as file:
+        scaler = pickle.load(file)
+    print("Success: Scaler loaded!")
+else:
+    print("No saved scaler found, creating a new one")
+    scaler = StandardScaler()
+    
 # check if we have a model in the directory give
 if os.path.exists(model_path):
     # open the file in binary read mode
@@ -39,7 +52,7 @@ if os.path.exists(model_path):
 else:
     print("Failed to find the model file")
     model = None
-    
+
 def feature_engineer(form_data):
     # copy the data 
     data = form_data.copy()
@@ -86,10 +99,16 @@ def feature_engineer(form_data):
         df['PackageTier_mid_tier'] = 0
         df['PackageTier_premium'] = 0
         df['PackageTier_high_end'] = 1
+    
+    # numeric features for scaling
+    float_features = ['MonthlyCharges', 'TotalCharges']   
+    scaled_cols = scaler.fit_transform(df[float_features])
+    df[float_features] = scaled_cols.astype(float)
+
     # return the feature engineered data
     data = df.values
-    print(df.info())
     return data
+
 
 # create route for the app
 @app.route('/predict', methods=['POST'])
@@ -102,21 +121,21 @@ def predict():
         # get data from json request
         data = request.get_json()
         
+        # perform feature engineering
         features_arr = feature_engineer(data)
-        #print("my features",features_arr)
+        print(features_arr)
         # convert to numpy array
         input_features = np.array(features_arr).reshape(1,-1)
-        #print(input_features)
+        
         # make prediction
-        prediction = model.predict(input_features)
+        prediction = model.predict(input_features)[0]
         
         # store the results
         result = {
             'prediction': int(prediction)
         }
         
-        result.headers.add("Access-Control-Allow-Origin", "*")
-        
+        # return results as json
         return jsonify(result)
     
     except Exception as e:

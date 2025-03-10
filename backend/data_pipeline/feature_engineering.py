@@ -15,9 +15,10 @@ class FeatureEngineer:
         df = df.drop(columns=['customerID', 'SeniorCitizen', 'Partner', 'Dependents', 'gender']) 
         
         # remove spaces between words in InternetService column
-        df['InternetService'] = df['InternetService'].str.split().str.join('')
-        df['Contract'] = df['Contract'].str.split().str.join('')
-        df['PaymentMethod'] = df['PaymentMethod'].str.split().str.join('')
+        df['InternetService'] = df['InternetService'].str.split().str.join('').str.lower()
+        df['Contract'] = df['Contract'].str.split().str.join('').str.lower()
+        df['PaymentMethod'] = df['PaymentMethod'].str.split().str.join('').str.lower()
+        
         
         # one hot encoder
         # encode with OneHotEncoder from sklearn
@@ -29,9 +30,9 @@ class FeatureEngineer:
 
         # drop the old categorical columns
         df_new = df_new.drop(self.category_features, axis=1)
-        
+    
         # define our bins
-        bins = [0, 30, 70, 100, 120]
+        bins = [0.00, 30.00, 70.00, 100.00, 120.00]
 
         """
             mapping our labels to numeric values
@@ -68,12 +69,18 @@ class FeatureEngineer:
         # drop the old categorical columns
         df_new = df_new.drop(category_cols, axis=1)
         
-        #print(df_new)
         # creating a new feature the identify how many services a customer has
         # list of the services 
         services = df_new[['PaperlessBilling', 'StreamingMovies', 'StreamingTV', 'TechSupport', 'DeviceProtection', 'OnlineBackup', 'OnlineSecurity', 'MultipleLines', 'PhoneService', 'InternetService_dsl', 'InternetService_fiberoptic']]
         
         # store the counts of each of services in a new column
         df_new['count_of_services'] = df_new[services.columns].apply(lambda row: row.value_counts().get(1,0), axis=1)
-
+        
+        df_new['MonthlyCharges'] = df_new['MonthlyCharges'].round(2)
+        df_new['TotalCharges'] = df_new['TotalCharges'].round(2)
+        
+        float_cols = ['MonthlyCharges', 'TotalCharges']
+        for col in df_new.columns:
+            if col not in float_cols and df_new[col].dtype == 'float64':
+                df_new[col] = df_new[col].astype(int)
         return df_new
