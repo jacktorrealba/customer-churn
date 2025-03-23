@@ -1,12 +1,7 @@
 'use client'
 import React, { useState } from "react";
-import ResultsModal from '@/app/components/modal';
 
 export default function Home() {
-
-  const [show, setShow] = useState(false)
-  const handleShow = () => setShow(true);
-
   // define form elements and their initial state
   const [formData, setFormData] = useState({
     PhoneService: 0,
@@ -30,6 +25,8 @@ export default function Home() {
     PaymentMethod: ""
   });
 
+  // store prediction
+  const [prediction, setPrediction] = useState(null)
 
   const handleChange = ({target : {name, type, value, checked}}) => { // deconstructing fields from the target
       // define variable to hold the new values from the form inputs
@@ -55,16 +52,18 @@ export default function Home() {
         ...formData,
         [name]: newVal
     }));
-    
   }
+
+  const [showResults, setShowResults] = useState(false);
+  
 
   // function for handling form submission
   const handleSubmit =  async(e) => {
     e.preventDefault()
     // map the form data to match the model input
     const modelInput = {
-      PhoneService: formData.PhoneService ? 1 : 0,
       Tenure: formData.Tenure === '' ? 0 : parseFloat(formData.Tenure),
+      PhoneService: formData.PhoneService ? 1 : 0,
       MultipleLines: formData.MultipleLines ? 1 : 0,
       OnlineSecurity: formData.OnlineSecurity ? 1 : 0,
       OnlineBackup: formData.OnlineBackup ? 1 : 0,
@@ -73,18 +72,18 @@ export default function Home() {
       StreamingTV: formData.StreamingTV ? 1 : 0,
       StreamingMovies: formData.StreamingMovies ? 1 : 0,
       PaperlessBilling: formData.PaperlessBilling ? 1 : 0,
-      InternetService_fiberoptic: formData.InternetService === 'fiberoptic' ? 1 : 0,
+      MonthlyCharges: formData.MonthlyCharges === '' ? 0 : parseFloat(formData.MonthlyCharges),
+      TotalCharges: formData.TotalCharges === '' ? 0 : parseFloat(formData.TotalCharges),
       InternetService_dsl: formData.InternetService === 'dsl' ? 1 : 0,
+      InternetService_fiberoptic: formData.InternetService === 'fiberoptic' ? 1 : 0,
       InternetService_no: formData.InternetService === 'no' ? 1 : 0,
+      Contract_month_to_month: formData.Contract === 'Month_to_month' ? 1 : 0,
       Contract_oneyear: formData.Contract === 'oneyear' ? 1 : 0,
       Contract_twoyear: formData.Contract === 'twoyear' ? 1 : 0,
-      Contract_Month_to_month: formData.Contract === 'month-to-month' ? 1 : 0,
-      PaymentMethod_creditcard: formData.PaymentMethod === 'creditcard(automatic)' ? 1 : 0,
-      PaymentMethod_banktransfer: formData.PaymentMethod === 'banktransfer(automatic)' ? 1 : 0,
+      PaymentMethod_banktransfer: formData.PaymentMethod === 'banktransfer' ? 1 : 0,
+      PaymentMethod_creditcard: formData.PaymentMethod === 'creditcard' ? 1 : 0,
       PaymentMethod_electroniccheck: formData.PaymentMethod === 'electroniccheck' ? 1 : 0,
       PaymentMethod_mailedcheck: formData.PaymentMethod === 'mailedcheck' ? 1 : 0,
-      MonthlyCharges: formData.MonthlyCharges === '' ? 0 : parseFloat(formData.MonthlyCharges),
-      TotalCharges: formData.TotalCharges === '' ? 0 : parseFloat(formData.TotalCharges)
     };
 
     try {
@@ -97,9 +96,8 @@ export default function Home() {
       });
 
       const result = await response.json();
-      console.log(result);
-      handleShow();
-
+      setPrediction(result.prediction ? "CHURN" : "NOT churn");
+      setShowResults(true)
     } catch (error) {
       console.log(error);
     }
@@ -247,10 +245,12 @@ export default function Home() {
             <div className="predict-div">
               <button id="predict-btn" type="submit">Predict</button>
             </div>
+            <div className="results-div">
+              {prediction ? `This customer is likely to ${prediction}` : null}
+            </div>
           </div>
         </div>
       </form>
-      <ResultsModal></ResultsModal>
     </div>
   );
 }

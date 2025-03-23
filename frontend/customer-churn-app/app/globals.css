@@ -46,6 +46,13 @@ body {
   justify-content: center;
 }
 
+.results-div {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+}
+
 #predict-btn {
   width: 25%;
   padding-top: .5rem;

@@ -37,6 +37,7 @@ if os.path.exists(model_path):
     with open(model_path, 'rb') as file:
         # load the model from the file
         loaded_object = pickle.load(file)
+        #print(loaded_object)
         # if the model is in a dictionary.. extract it
         if isinstance(loaded_object, dict):
             model = loaded_object.get('model', None)  # Extract only the model
@@ -46,12 +47,18 @@ if os.path.exists(model_path):
             model = loaded_object
     if hasattr(model, "predict"):
         print("Success: Model loaded!")
+        
+        # store the feature names used in training
+        feature_names = loaded_object.get('feature_names', None)
+        
     else:
         print("Model is not the correct type")
         model = None
+        feature_names = None
 else:
     print("Failed to find the model file")
     model = None
+    feature_names = None
 
 def feature_engineer(form_data):
     # copy the data 
@@ -65,13 +72,13 @@ def feature_engineer(form_data):
     df['count_of_services'] = (df[services].iloc[0] == 1).sum()
 
     # == binning customer tenure ==
-    if 0 < int(df['Tenure'].iloc[0]) <= 12: # if they are between 0 and 12 -> new customer
+    if 0 <= int(df['Tenure'].iloc[0]) <= 12: # if they are between 0 and 12 -> new customer
         df['TenureCategory_new_customer'] = 1
         df['TenureCategory_1_to_3yr_customer'] = 0
         df['TenureCategory_3_plus_customer'] = 0
-    elif 13 < int(df['Tenure'].iloc[0]) <= 36: # if they are between 13 and 36 -> 1 to 3yr customer
+    elif 13 <= int(df['Tenure'].iloc[0]) <= 36: # if they are between 13 and 36 -> 1 to 3yr customer
         df['TenureCategory_new_customer'] = 0
-        df['TTenureCategory_1_to_3yr_customer'] = 1
+        df['TenureCategory_1_to_3yr_customer'] = 1
         df['TenureCategory_3_plus_customer'] = 0
     else: # anything greater than 36 -> 3 plus yr customer
         df['TenureCategory_new_customer'] = 0
@@ -89,7 +96,7 @@ def feature_engineer(form_data):
         df['PackageTier_mid_tier'] = 1
         df['PackageTier_premium'] = 0
         df['PackageTier_high_end'] = 0
-    elif 71 < int(df['MonthlyCharges'].iloc[0] <= 100): 
+    elif 71 < int(df['MonthlyCharges'].iloc[0]) <= 100: 
         df['PackageTier_basic'] = 0
         df['PackageTier_mid_tier'] = 0
         df['PackageTier_premium'] = 1
@@ -102,12 +109,12 @@ def feature_engineer(form_data):
     
     # numeric features for scaling
     float_features = ['MonthlyCharges', 'TotalCharges']   
-    scaled_cols = scaler.fit_transform(df[float_features])
-    df[float_features] = scaled_cols.astype(float)
+    df[float_features] = scaler.fit_transform(df[float_features]).astype(float)
 
+    df = df[feature_names]
+    
     # return the feature engineered data
-    data = df.values
-    return data
+    return df
 
 
 # create route for the app
@@ -122,20 +129,25 @@ def predict():
         data = request.get_json()
         
         # perform feature engineering
-        features_arr = feature_engineer(data)
-        print(features_arr)
-        # convert to numpy array
-        input_features = np.array(features_arr).reshape(1,-1)
+        input_df = feature_engineer(data)
+
+        #print(f"Input DataFrame shape: {input_df.shape}")
+        #print(f"Input DataFrame columns: {input_df.columns}")
+        
+        if feature_names is not None:
+            input_df = input_df[feature_names]
         
         # make prediction
-        prediction = model.predict(input_features)[0]
+        prediction = model.predict(input_df)[0]
+        
+        
         
         # store the results
         result = {
-            'prediction': int(prediction)
+            'prediction': bool(prediction)
         }
         
-        # return results as json
+        #return results as json
         return jsonify(result)
     
     except Exception as e:

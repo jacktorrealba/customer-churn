@@ -1,9 +1,9 @@
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
+import pickle
 from data_pipeline import DataCleaner, FeatureEngineer,  ModelTrainer
 
 def main():
-    df = pd.read_csv('backend/data/raw/customer_churn.csv')
+    df = pd.read_csv('data/raw/customer_churn.csv')
     
     # initalize cleaner
     cleaner = DataCleaner()
@@ -20,12 +20,29 @@ def main():
     y = processed_data['Churn']
     X = processed_data.drop('Churn', axis=1)
     
+    # print(f"Features shape: {X.shape}")
+    # print(f"Feature names: {X.columns.tolist()}")
+    # print(f"Target distribution: {y.value_counts()}")
+    
     # train the model
-    model_trainer.train(X, y)
+    model = model_trainer.train(X, y)
+    
+    evaluation = model_trainer.evaluate()
+    print(evaluation)
+    
+    model_data = {
+        'model' : model,
+        'feature_names': X.columns.tolist()
+    }
     
     # save the model as a pickle file
-    model_trainer.save_model('backend/model/churn_model.pkl')
-    model_trainer.save_scaler('backend/model/scaler.pkl')
+    with open('model/churn_model.pkl', 'wb') as f:
+        pickle.dump(model_data, f)
+    
+    with open('model/scaler.pkl', 'wb') as f:
+        pickle.dump(model_trainer.scaler, f)
+    
+    print("Model and scalar successfully saved")
     
 if __name__ == "__main__":
     main()

@@ -3,11 +3,14 @@ import pandas as pd
 class DataCleaner:
     def __init__(self):
         # define numeric columns
-        self.numeric_columns = ['tenure', 'MonthlyCharges', 'TotalCharges']
+        self.numeric_columns = ['Tenure', 'MonthlyCharges', 'TotalCharges']
     
     def clean(self, data: pd.DataFrame) -> pd.DataFrame:
         # copy data
         df = data.copy()
+        
+        # tenure feature is lowercase, let's capitalize it
+        df = df.rename(columns={'tenure': 'Tenure'})
         
         # map boolean to 1 and 0
         df["Churn"] = df["Churn"].map({"Yes": 1, "No": 0})
@@ -46,7 +49,7 @@ class DataCleaner:
                         df.loc[df[column] > upper_bound, column] = upper_bound
             return df
         
-        numeric_cols = df[['MonthlyCharges', 'TotalCharges', 'tenure']]
+        numeric_cols = df[['MonthlyCharges', 'TotalCharges', 'Tenure']]
         df  = handle_outliers(df,numeric_cols)
         
         # fill columns that were converted earlier with the mean of the column
