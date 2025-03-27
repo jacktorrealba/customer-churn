@@ -30,6 +30,8 @@ def main():
     evaluation = model_trainer.evaluate()
     print(evaluation)
     
+    
+    
     model_data = {
         'model' : model,
         'feature_names': X.columns.tolist()
