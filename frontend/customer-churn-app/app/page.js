@@ -114,7 +114,7 @@ export default function Home() {
             <h3>Telecomm Customer Churn Predictor</h3>
           </div>
           <div className="divider">
-            <p>Fill out the form with a customer's profile to predict whether or not the customer will churn</p>
+            <p className="instructions">Fill out the form with a customer's profile to predict whether or not the customer will churn</p>
           </div>
           <div className="divider">
             <hr></hr>

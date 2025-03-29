@@ -74,9 +74,11 @@ class FeatureEngineer:
         # store the counts of each of services in a new column
         df_new['count_of_services'] = df_new[services.columns].apply(lambda row: row.value_counts().get(1,0), axis=1)
         
+        # round the values 
         df_new['MonthlyCharges'] = df_new['MonthlyCharges'].round(2)
         df_new['TotalCharges'] = df_new['TotalCharges'].round(2)
         
+        # converting the other numeric features to ints except for MonthlyCharges and TotalCharges
         float_cols = ['MonthlyCharges', 'TotalCharges']
         for col in df_new.columns:
             if col not in float_cols and df_new[col].dtype == 'float64':

@@ -11,7 +11,7 @@ from sklearn.preprocessing import StandardScaler
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {
-    "origins": "http://localhost:3000",  # react url 
+    "origins": "http://localhost:3000", 
     "methods": ["GET", "POST", "OPTIONS"],
     "allow_headers": ["Content-Type", "Authorization"]
 }})
@@ -139,8 +139,6 @@ def predict():
         
         # make prediction
         prediction = model.predict(input_df)[0]
-        
-        
         
         # store the results
         result = {

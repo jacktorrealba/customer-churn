@@ -27,17 +27,16 @@ def main():
     # train the model
     model = model_trainer.train(X, y)
     
-    evaluation = model_trainer.evaluate()
-    print(evaluation)
+    # store the evaluation - used to check model performance
+    evaluation = model_trainer.evaluate()    
     
-    
-    
+    # store the model and the features 
     model_data = {
         'model' : model,
         'feature_names': X.columns.tolist()
     }
     
-    # save the model as a pickle file
+    # save the model and the scaler as a pickle file
     with open('model/churn_model.pkl', 'wb') as f:
         pickle.dump(model_data, f)
     

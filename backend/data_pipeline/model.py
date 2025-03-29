@@ -34,9 +34,6 @@ class ModelTrainer:
         # select columns to transform
         cols_to_scale = X_train.select_dtypes(include=['float64']).columns
         
-        # transform
-        #self.scaler.fit_transform(X_train[cols_to_scale])
-        
         # transform both training and test data
         X_train[cols_to_scale] = self.scaler.fit_transform(X_train[cols_to_scale]).astype(float)
         X_test[cols_to_scale] = self.scaler.transform(X_test[cols_to_scale])
@@ -58,10 +55,9 @@ class ModelTrainer:
             "Recall": recall_score(self.y_test, y_pred),
             "F1 Score": f1_score(self.y_test, y_pred),
             "ROC-AUC": roc_auc_score(self.y_test, y_pred_proba),
-            "Confusion Matrix": confusion_matrix(self.y_test, y_pred).tolist()  # Convert to list for better readability
+            "Confusion Matrix": confusion_matrix(self.y_test, y_pred).tolist() 
         }
         
-         # Print probabilities distribution
         print("Prediction Probabilities Distribution:")
         print(f"Min probability: {y_pred_proba.min()}")
         print(f"Max probability: {y_pred_proba.max()}")

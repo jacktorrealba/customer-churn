@@ -122,3 +122,56 @@ a {
     color-scheme: dark;
   }
 }
+
+@media screen and (width < 1000px) {
+  .form-card-body {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    text-align: start;
+    gap: 2rem;
+    
+  }
+  .boolean-options {
+    width: 100%;
+  }
+
+  .form-item {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .form-input-num {
+    width: 100%;
+  }
+
+  .numeric-options {
+    width: 100%;
+  }
+
+  .dropdown-options {
+    width: 100%;
+    margin-left: -12;
+  }
+
+  .form-input-dropdown {
+    width: 100%;
+  }
+
+  #predict-btn {
+    width: 100%;
+  }
+
+  .form-card {
+    box-sizing: unset;
+  }
+
+  .form-card-title {
+    text-align: center;
+  }
+
+  .instructions {
+    font-size: small;
+  }
+}
