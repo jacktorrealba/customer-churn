@@ -13,13 +13,13 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {
     "origins": [
         "http://localhost:3000",
-        "https://customerchurn.vercel.app"
+        "https://customer-churn-three.vercel.app"
         ], 
     "methods": ["GET", "POST", "OPTIONS"],
     "allow_headers": ["Content-Type", "Authorization"]
 }})
 
-# load model 
+# load model
 model_path = os.path.join(os.path.dirname(__file__), 'model', 'churn_model.pkl') 
 # load scaler
 scaler_path = os.path.join(os.path.dirname(__file__), 'model', 'scaler.pkl')
