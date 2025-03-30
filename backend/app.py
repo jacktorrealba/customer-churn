@@ -11,7 +11,10 @@ from sklearn.preprocessing import StandardScaler
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {
-    "origins": "http://localhost:3000", 
+    "origins": [
+        "http://localhost:3000",
+        "https://customerchurn.vercel.app"
+        ], 
     "methods": ["GET", "POST", "OPTIONS"],
     "allow_headers": ["Content-Type", "Authorization"]
 }})
@@ -156,5 +159,6 @@ def predict():
 os.makedirs(os.path.join(os.path.dirname(__file__), 'model'), exist_ok=True)
 
 if __name__ == '__main__':
-    app.run(debug=True,port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0',port=port)
     
