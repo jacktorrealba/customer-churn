@@ -7,8 +7,8 @@ body {
 }
 
 body {
-  color: #f8f7ee;
-  background: var(--background);
+  color: #272727 !important;
+  background: #1e3231 !important;
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -19,10 +19,11 @@ body {
 }
 
 .form-card {
+  background: whitesmoke !important;
   margin-left: auto;
   margin-right: auto;
   width: 75%;
-  border: 2px solid gray;
+  border: 3px solid black;
   border-radius: 8px;
   padding: 2rem;
 }
@@ -86,30 +87,29 @@ body {
   margin-right: 0.5rem;
 }
 
+
 .form-input-num {
-  width: 45%;
+  width: 45% !important;
 }
 
 
 .form-input-dropdown {
-  width: 45%;
-  margin-left: .75rem;
+  width: 45% !important; 
+  margin-left: .75rem !important;
 }
 
 .boolean-options {
-  width: 30%;
+  width: 30% !important;
 }
 .numeric-options {
-  width: 30%;
+  width: 30% !important;
  }
 .dropdown-options {
-  width: 30%;
+  width: 30% !important;
 }
 
 * {
   box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
 
 a {
@@ -117,13 +117,16 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}
-
 @media screen and (width < 1000px) {
+
+  body {
+    color: #272727 !important;
+    background: #1e3231 !important;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   .form-card-body {
     display: grid;
     justify-content: center;
@@ -133,45 +136,45 @@ a {
     
   }
   .boolean-options {
-    width: 100%;
+    width: 100% !important;
   }
 
   .form-item {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
   .form-input-num {
-    width: 100%;
+    width: 100% !important;
   }
 
   .numeric-options {
-    width: 100%;
+    width: 100% !important;
   }
 
   .dropdown-options {
-    width: 100%;
-    margin-left: -12;
+    width: 100% !important;
+    margin-left: -12 !important;
   }
 
   .form-input-dropdown {
-    width: 100%;
+    width: 100% !important;
   }
 
   #predict-btn {
-    width: 100%;
+    width: 100% !important; 
   }
 
   .form-card {
-    box-sizing: unset;
+    box-sizing: unset !important;
   }
 
   .form-card-title {
-    text-align: center;
+    text-align: center !important;
   }
 
   .instructions {
-    font-size: small;
+    font-size: small !important;
   }
 }
