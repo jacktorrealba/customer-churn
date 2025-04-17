@@ -8,7 +8,6 @@ import pandas as pd
 import traceback
 from sklearn.preprocessing import StandardScaler
 
-
 app = Flask(__name__)
 CORS(app, resources={r"/*": {
     "origins": [

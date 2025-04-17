@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
+import  Spinner from "react-bootstrap/Spinner";
+
 
 export default function Home() {
   // define form elements and their initial state
@@ -58,11 +60,13 @@ export default function Home() {
   }
 
   const [showResults, setShowResults] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
   
 
   // function for handling form submission
   const handleSubmit =  async(e) => {
     e.preventDefault()
+    setShowLoading(true);
     // map the form data to match the model input
     const modelInput = {
       Tenure: formData.Tenure === '' ? 0 : parseFloat(formData.Tenure),
@@ -97,7 +101,7 @@ export default function Home() {
         },
         body: JSON.stringify(modelInput)   
       });
-
+      setShowLoading(false);
       const result = await response.json();
       setPrediction(result.prediction ? "CHURN" : "NOT churn");
       setShowResults(true)
@@ -219,8 +223,8 @@ export default function Home() {
           </div>
           <div className="form-card-footer">
             <div className="predict-div">
-              
-              <Button variant="primary" type="submit" id="predict-btn">Predict</Button>
+              { showLoading && <Button id="loadingBtn" variant="primary" disabled><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true"/> Loading...</Button>}
+              { !showLoading && <Button variant="primary" type="submit" id="predict-btn">Predict</Button>}
             </div>
             <div className="results-div">
               {prediction ? `This customer is likely to ${prediction}` : null}
