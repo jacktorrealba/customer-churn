@@ -33,7 +33,6 @@ data/processed/*
 !data/processed/.gitkeep
 
 # Model files
-*.pkl
 *.h5
 
 # Logs
