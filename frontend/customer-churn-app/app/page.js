@@ -65,7 +65,8 @@ export default function Home() {
 
   // function for handling form submission
   const handleSubmit =  async(e) => {
-    e.preventDefault()
+    e.preventDefault();
+    setPrediction(null);
     setShowLoading(true);
     // map the form data to match the model input
     const modelInput = {

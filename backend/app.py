@@ -12,7 +12,8 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {
     "origins": [
         "http://localhost:3000",
-        "https://customer-churn-three.vercel.app"
+        "https://customer-churn-three.vercel.app",
+        "https://customer-churn-wg5y.onrender.com"
         ], 
     "methods": ["GET", "POST", "OPTIONS"],
     "allow_headers": ["Content-Type", "Authorization"]
@@ -132,9 +133,6 @@ def predict():
         
         # perform feature engineering
         input_df = feature_engineer(data)
-
-        #print(f"Input DataFrame shape: {input_df.shape}")
-        #print(f"Input DataFrame columns: {input_df.columns}")
         
         if feature_names is not None:
             input_df = input_df[feature_names]
@@ -159,5 +157,5 @@ os.makedirs(os.path.join(os.path.dirname(__file__), 'model'), exist_ok=True)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0',port=port)
+    app.run(host="0.0.0.0", port=port)
     
