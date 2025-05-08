@@ -8,4 +8,10 @@ The aim of this project is to test out different binary classification models to
 
 
 ## Analysis
-For a detailed analysis, please check out the jupyter notebooks where all data cleaning, feature engineering, and result analysis has been documented.
+For a detailed analysis, please check out the jupyter notebooks (~/backend/notebooks) where all data cleaning, feature engineering, and result analysis has been documented.
+
+## Tech Stack
+- Frontend: Next.js 
+- Backend: Flask
+- Data Cleaning/Analysis: Jupyter Notebooks
+- Libraries: pandas, seaborn, numpy, matplotlib, sklearn
